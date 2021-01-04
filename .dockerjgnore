@@ -1,1 +1,4 @@
-node_module/
+.git
+.gitignore
+.volumes
+node_modules

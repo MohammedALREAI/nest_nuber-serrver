@@ -77,3 +77,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 
 how it work we need to create resolver witch it the same ideai of the controller => modules =>services =>repostory =>
+
+
+
+add => delate => update => findAll =>findOneByid
+
+
