@@ -1,43 +1,43 @@
-import { PaymentModule } from "./modules/payment/payment.module";
-import { CommonModule } from "./common/modules/common.module";
-import { OrderModule } from "./modules/order/order.module";
-import { DishModule } from "./modules/dish/dish.module";
-import { CategoryModule } from "./modules/category/category.module";
-import { MailModule } from "./common/modules/mail/mail.module";
-import { AuthModule } from "./modules/auth/auth.module";
-import { JwtModule } from "./modules/jwt/jwt.module";
-import { UserModule } from "./modules/user/user.module";
 import { Module } from "@nestjs/common";
-import { GraphQLModule } from "@nestjs/graphql";
 import { ConfigModule } from "@nestjs/config";
+import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { DatabaseConnectionService } from "./TypeOrmServicess";
-import { config } from "./Myconfig";
+import { UsersModule } from "./users/users.module";
+import { JwtModule } from "./jwt/jwt.module";
+import { AuthModule } from "./auth/auth.module";
+import { MailModule } from "./mail/mail.module";
+import { RestaurantsModule } from "./restaurants/restaurants.module";
+import { OrdersModule } from "./orders/orders.module";
+import { CommonModule } from "./common/common.module";
+import { PaymentsModule } from "./payments/payments.module";
 import { ScheduleModule } from "@nestjs/schedule";
+import { UploadsModule } from "./uploads/uploads.module";
+import { DatabaseConnectionService } from "./DatabaseConnection";
+import config from "./config";
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
-
-    ConfigModule.forRoot(config.configModuleOptions),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ".env",
+      ignoreEnvFile: true,
+    }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConnectionService,
     }),
-
-    GraphQLModule.forRoot(config.gqlModuleOptions),
+    GraphQLModule.forRoot(config().configGraphQL),
+    ScheduleModule.forRoot(),
     JwtModule.forRoot({
-      secretKey: process.env.TOKEN_SECRET,
+      privateKey: process.env.PRIVATE_KEY,
     }),
-    MailModule.forRoot(config.mailConfig),
-    CommonModule,
-    OrderModule,
-    DishModule,
-    CategoryModule,
-    MailModule,
+    MailModule.forRoot(config().configMail),
     AuthModule,
-    UserModule,
-    PaymentModule,
+    UsersModule,
+    RestaurantsModule,
+    OrdersModule,
     CommonModule,
+    PaymentsModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [],
