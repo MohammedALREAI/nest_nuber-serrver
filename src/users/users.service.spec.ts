@@ -1,3 +1,4 @@
+import { CreateAccountInput } from "./dtos/create-account.dto";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { JwtService } from "src/jwt/jwt.service";
@@ -67,7 +68,7 @@ describe("UserService", () => {
   });
 
   describe("createAccount", () => {
-    const createAccountArgs = {
+    const createAccountArgs: CreateAccountInput = {
       email: "bs@email.com",
       password: "bs.password",
       role: UserRole.Client,
