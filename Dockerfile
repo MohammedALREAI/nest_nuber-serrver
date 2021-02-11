@@ -1,10 +1,11 @@
-FROM node:14-alpine
-WORKDIR /app
-COPY package.json /app
-COPY yarn.lock /app
+FROM node:latest
+WORKDIR /nuber_eats
+COPY package.json ./
+COPY yarn.lock ./
+COPY . /nuber_eats
 RUN  yarn install
-
-ADD ./ dist
 RUN yarn build
-EXPOSE 3000
+COPY dist ./
+RUN yarn build
+EXPOSE 4000
 CMD [ "yarn","start:dev" ]
