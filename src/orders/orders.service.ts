@@ -1,4 +1,4 @@
-import { Config } from './../config';
+import { Config } from "./../config";
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PubSub } from "graphql-subscriptions";

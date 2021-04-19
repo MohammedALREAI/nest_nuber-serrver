@@ -1,4 +1,4 @@
-import { Config } from './../config';
+import { Config } from "./../config";
 import { Test } from "@nestjs/testing";
 import * as jwt from "jsonwebtoken";
 

@@ -1,4 +1,4 @@
-import { Config } from './../config';
+import { Config } from "./../config";
 import { Controller, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import * as AWS from "aws-sdk";

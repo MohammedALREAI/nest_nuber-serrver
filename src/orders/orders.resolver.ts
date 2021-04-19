@@ -1,4 +1,4 @@
-import { Config } from './../config';
+import { Config } from "./../config";
 import { Inject } from "@nestjs/common";
 import { Args, Mutation, Resolver, Query, Subscription } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";

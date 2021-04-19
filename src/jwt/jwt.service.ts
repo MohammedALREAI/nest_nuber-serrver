@@ -1,4 +1,4 @@
-import { Config } from './../config';
+import { Config } from "./../config";
 import { Inject, Injectable } from "@nestjs/common";
 import * as jwt from "jsonwebtoken";
 import { JwtModuleOptions } from "./jwt.interfaces";

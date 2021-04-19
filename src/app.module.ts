@@ -1,4 +1,4 @@
-import { Config } from './config';
+import { Config } from "./config";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
