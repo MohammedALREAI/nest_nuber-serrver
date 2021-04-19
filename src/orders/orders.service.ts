@@ -1,12 +1,8 @@
+import { Config } from './../config';
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PubSub } from "graphql-subscriptions";
-import {
-  NEW_COOKED_ORDER,
-  NEW_ORDER_UPDATE,
-  NEW_PENDING_ORDER,
-  PUB_SUB,
-} from "src/common/common.constants";
+
 import { Dish } from "src/restaurants/entities/dish.entity";
 import { Restaurant } from "src/restaurants/entities/restaurant.entity";
 import { User, UserRole } from "src/users/entities/user.entity";
@@ -30,7 +26,7 @@ export class OrderService {
     private readonly restaurants: Repository<Restaurant>,
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
-    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+    @Inject(Config.PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
   async createOrder(
@@ -90,7 +86,7 @@ export class OrderService {
           items: orderItems,
         }),
       );
-      await this.pubSub.publish(NEW_PENDING_ORDER, {
+      await this.pubSub.publish(Config.NEW_PENDING_ORDER, {
         pendingOrders: { order, ownerId: restaurant.ownerId },
       });
       return {
@@ -233,12 +229,12 @@ export class OrderService {
       const newOrder = { ...order, status };
       if (user.role === UserRole.Owner) {
         if (status === OrderStatus.Cooked) {
-          await this.pubSub.publish(NEW_COOKED_ORDER, {
+          await this.pubSub.publish(Config.NEW_COOKED_ORDER, {
             cookedOrders: newOrder,
           });
         }
       }
-      await this.pubSub.publish(NEW_ORDER_UPDATE, { orderUpdates: newOrder });
+      await this.pubSub.publish(Config.NEW_ORDER_UPDATE, { orderUpdates: newOrder });
       return {
         ok: true,
       };
@@ -269,7 +265,7 @@ export class OrderService {
         id: orderId,
         driver,
       });
-      await this.pubSub.publish(NEW_ORDER_UPDATE, {
+      await this.pubSub.publish(Config.NEW_ORDER_UPDATE, {
         orderUpdates: { ...order, driver },
       });
       return {

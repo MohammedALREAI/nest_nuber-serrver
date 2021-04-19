@@ -1,12 +1,12 @@
+import { Config } from './../config';
 import got from "got";
 import * as FormData from "form-data";
 import { Inject, Injectable } from "@nestjs/common";
-import { CONFIG_OPTIONS } from "src/common/common.constants";
 import { EmailVar, MailModuleOptions } from "./mail.interfaces";
 
 @Injectable()
 export class MailService {
-  constructor(@Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions) {}
+  constructor(@Inject(Config.CONFIG_OPTIONS) private readonly options: MailModuleOptions) {}
 
   async sendEmail(subject: string, template: string, emailVars: EmailVar[]): Promise<boolean> {
     const form = new FormData();

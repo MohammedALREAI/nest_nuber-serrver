@@ -1,7 +1,7 @@
+import { Config } from './../config';
 import { Test } from "@nestjs/testing";
 import got from "got";
 import * as FormData from "form-data";
-import { CONFIG_OPTIONS } from "src/common/common.constants";
 import { MailService } from "./mail.service";
 
 jest.mock("got");
@@ -17,7 +17,7 @@ describe("MailService", () => {
       providers: [
         MailService,
         {
-          provide: CONFIG_OPTIONS,
+          provide: Config.CONFIG_OPTIONS,
           useValue: {
             apiKey: "test-apiKey",
             domain: TEST_DOMAIN,
@@ -45,10 +45,10 @@ describe("MailService", () => {
         sendVerificationEmailArgs.code,
       );
       expect(service.sendEmail).toHaveBeenCalledTimes(1);
-      // expect(service.sendEmail).toHaveBeenCalledWith("Verify Your Email", "verify-email", [
-      //   { key: "code", value: sendVerificationEmailArgs.code },
-      //   { key: "username", value: sendVerificationEmailArgs.email },
-      // ]);
+      expect(service.sendEmail).toHaveBeenCalledWith("Verify Your Email", "verify-email", [
+        { key: "code", value: sendVerificationEmailArgs.code },
+        { key: "username", value: sendVerificationEmailArgs.email },
+      ]);
     });
   });
   describe("sendEmail", () => {

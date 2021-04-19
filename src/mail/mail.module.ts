@@ -1,5 +1,5 @@
+import { Config } from './../config';
 import { DynamicModule, Global, Module } from "@nestjs/common";
-import { CONFIG_OPTIONS } from "src/common/common.constants";
 import { MailModuleOptions } from "./mail.interfaces";
 import { MailService } from "./mail.service";
 
@@ -11,7 +11,7 @@ export class MailModule {
       module: MailModule,
       providers: [
         {
-          provide: CONFIG_OPTIONS,
+          provide: Config.CONFIG_OPTIONS,
           useValue: options,
         },
         MailService,

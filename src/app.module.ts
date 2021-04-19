@@ -1,3 +1,4 @@
+import { Config } from './config';
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
@@ -13,24 +14,18 @@ import { PaymentsModule } from "./payments/payments.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { UploadsModule } from "./uploads/uploads.module";
 import { DatabaseConnectionService } from "./DatabaseConnection";
-import config from "./config";
-
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ".env",
-      ignoreEnvFile: true,
-    }),
+    ConfigModule.forRoot(Config.Env),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConnectionService,
     }),
-    GraphQLModule.forRoot(config().configGraphQL),
+    GraphQLModule.forRoot(Config.GraphQL),
     ScheduleModule.forRoot(),
     JwtModule.forRoot({
-      privateKey: process.env.PRIVATE_KEY,
+      privateKey: Config.JWT.apikey,
     }),
-    MailModule.forRoot(config().configMail),
+    MailModule.forRoot(Config.MAIL),
     AuthModule,
     UsersModule,
     RestaurantsModule,
