@@ -119,5 +119,8 @@
     ]
   },
   "main": "index.js",
-  "repository": "https://github.com/MohammedALREAI/nest_nuber-serrver.git"
+  "repository": "https://github.com/MohammedALREAI/nest_nuber-serrver.git",
+  "engines": {
+    "node": "14.15.4"
+  }
 }
