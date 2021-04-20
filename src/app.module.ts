@@ -1,3 +1,4 @@
+import { LoggerModule } from "./logger/logger.module";
 import { Config } from "./config";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
@@ -16,11 +17,12 @@ import { UploadsModule } from "./uploads/uploads.module";
 import { DatabaseConnectionService } from "./DatabaseConnection";
 @Module({
   imports: [
+    LoggerModule,
     ConfigModule.forRoot(Config.Env),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConnectionService,
     }),
-    GraphQLModule.forRoot(Config.GraphQL),
+    GraphQLModule.forRootAsync(Config.GraphQL),
     ScheduleModule.forRoot(),
     JwtModule.forRoot({
       privateKey: Config.JWT.apikey,

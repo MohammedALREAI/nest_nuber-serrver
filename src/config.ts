@@ -1,8 +1,7 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { MailModuleOptions } from "./mail/mail.interfaces";
-import { GqlModuleOptions } from "@nestjs/graphql";
+import { GqlModuleAsyncOptions } from "@nestjs/graphql";
 import { ConfigModuleOptions } from "@nestjs/config/dist/interfaces";
-import { validationSchema } from "./helper/validationSchema";
 import "reflect-metadata";
 import { config } from "dotenv";
 config();
@@ -11,18 +10,23 @@ export namespace Config {
   export const DB: TypeOrmModuleOptions = {
     name: "default",
     type: "postgres",
-    ssl: {
-      rejectUnauthorized: false,
-    },
-    host: process.env.DATABASE_HOST,
+    host: "localhost" || process.env.DATABASE_HOST,
     port: Number(process.env.DATABASE_PORT),
-    username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_DB,
+    username: "postgres" || process.env.DATABASE_USER,
+    password: "user" || process.env.DATABASE_PASSWORD,
+    database: "eats" || process.env.DATABASE_DB,
     synchronize: true,
+    // ssl:true,
     logging: true,
     entities: [__dirname + "/**/entities/*.entity.{ts,js}"],
+    migrations: [__dirname + "/migrations/**/*{.ts,.js}"],
+    migrationsRun: false,
+    maxQueryExecutionTime: 0.1 /** To log request runtime */,
+    cli: {
+      migrationsDir: __dirname + "/migrations/**/*{.ts,.js}",
+    },
   };
+
   export const MAIL: MailModuleOptions = {
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN_NAME,
@@ -42,21 +46,34 @@ export namespace Config {
   export const NEW_COOKED_ORDER = "NEW_COOKED_ORDER";
   export const NEW_ORDER_UPDATE = "NEW_ORDER_UPDATE";
 
-  export const GraphQL: GqlModuleOptions = {
-    playground: true,
-    installSubscriptionHandlers: true,
-    autoSchemaFile: true,
-    context: ({ req, connection }) => {
-      const TOKEN_KEY = "x-jwt";
-      return {
-        token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY],
-      };
-    },
+  export const GraphQL: GqlModuleAsyncOptions = {
+    useFactory: () => ({
+      playground: true,
+      autoSchemaFile: true,
+      installSubscriptionHandlers: true,
+      cors: {
+        origin: true,
+        credentials: true,
+      },
+      subscriptions: {},
+
+      context: ({ req, connection }) => {
+        const TOKEN_KEY = "x-jwt";
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY],
+        };
+      },
+    }),
   };
 
   export const Env: ConfigModuleOptions = {
     isGlobal: true,
     envFilePath: ".env.dev",
     ignoreEnvFile: true,
+  };
+
+  export const LOGGER_SETTINGS = {
+    level: "info",
+    silence: ["healthz", "IntrospectionQuery"],
   };
 }
