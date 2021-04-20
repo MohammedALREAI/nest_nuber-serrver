@@ -15,6 +15,9 @@ export namespace Config {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DB,
+    ssl: {
+      rejectUnauthorized: false,
+    },
     synchronize: true,
     // ssl:true,
     logging: true,
